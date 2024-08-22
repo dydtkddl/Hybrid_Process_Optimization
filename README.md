@@ -1,5 +1,4 @@
 # Hybrid_Process_Optimization
-# Hybrid_Process_Optimization
 
 **팀:** Octet Innovator  
 **대회:** Chemical Engineering Process Design Competition 2024  
@@ -21,75 +20,28 @@
 
 ## 주요 단계
 
-### 1. 시뮬레이션 데이터 생성
-- **소프트웨어**: Aspen과 AVEVA를 사용하여 스크러버 및 반응기 시스템의 다양한 공정 조건을 시뮬레이션했습니다.
-- **자동화**: Python 스크립트를 통해 시뮬레이션을 자동화하여 100,000개 이상의 케이스를 생성하고 `/data/` 디렉토리에 저장했습니다.
+### 1. 제1 시뮬레이션: 스크러버 시스템 시뮬레이션
+- **소프트웨어**: Aspen과 AVEVA를 사용하여 스크러버 시스템의 다양한 공정 조건을 시뮬레이션합니다.
+- **데이터 생성**: 다양한 공정 변수들을 조합하여 대규모 시뮬레이션 데이터를 생성하고 `/data/` 디렉토리에 저장합니다.
 
-### 2. 머신러닝 모델 개발
-- **훈련**: 시뮬레이션 데이터를 사용하여 스크러버 출력을 예측하고 반응기 조건을 최적화하는 머신러닝 모델을 학습시켰습니다.
-- **전처리**: 원시 시뮬레이션 데이터를 클리닝하고, 필터링하고, 전처리(예: 스케일링)한 후 학습, 검증, 테스트 세트로 분할했습니다.
-- **모델**: 여러 머신러닝 알고리즘을 테스트한 후, 대규모 추론에 가장 적합한 모델을 선택했습니다.
+### 2. 머신러닝 학습
+- **데이터 전처리**: 시뮬레이션 데이터의 클리닝, 필터링, 스케일링 등의 전처리 작업을 수행합니다.
+- **모델 훈련**: 머신러닝 모델을 훈련하여 스크러버 출력 예측 및 반응기 조건 최적화를 위한 모델을 개발합니다.
 
-### 3. 대규모 추론 및 최적화
-- **추론**: 훈련된 모델을 사용하여 수백만 개의 잠재적인 공정 조합을 추론하고, 이를 통해 수작업 시뮬레이션보다 시간을 크게 단축했습니다.
-- **필터링**: 추론된 조합을 공정 제약 조건과 운영 가능성을 고려하여 필터링했습니다.
-- **군집화**: DBSCAN과 같은 데이터 군집화 기법을 적용하여 공정 조합 수를 줄이고, 분석을 위한 최종 데이터를 도출했습니다.
+### 3. 대규모 추론 및 필터링
+- **추론**: 훈련된 머신러닝 모델을 사용해 수백만 개의 잠재적 공정 조합을 신속하게 추론합니다.
+- **필터링**: 추론된 조합 중 공정 제약 조건에 맞지 않는 조합을 제거하고, 운영 가능성이 높은 조합을 남깁니다.
 
+### 4. 군집화
+- **데이터 군집화**: DBSCAN 등의 군집화 알고리즘을 사용하여 필터링된 데이터에서 유사한 조합을 그룹화하고, 이를 통해 분석할 데이터 양을 줄입니다.
 
----
+### 5. 제2 시뮬레이션: 스트리퍼 시스템 시뮬레이션
+- **스트리퍼 시뮬레이션**: 군집화된 스크러버 액체 출력을 기반으로 스트리퍼 시스템 시뮬레이션을 수행하고, 추가적인 제약조건을 적용해 데이터를 필터링합니다.
 
-**Team:** Octet Innovator  
-**Competition:** Chemical Engineering Process Design Competition 2024  
+### 6. Flowsheet 최적화를 위한 데이터셋 병합
+- **데이터 병합**: 스크러버와 스트리퍼 시스템 간의 상호작용을 고려해 머신러닝 추론 결과와 스트리퍼 시뮬레이션 결과를 병합합니다.
+- **최적화된 공정 조합 도출**: 최종적으로 공정 전반에 대한 최적화된 조합을 도출합니다.
 
----
-
-## Overview
-This repository contains the full implementation of our hybrid modeling approach for chemical process optimization. Our project focuses on integrating large-scale simulations with machine learning models to optimize reactor and scrubber systems efficiently. The primary goal is to analyze and optimize complex process conditions in a systematic and automated manner, leading to the identification of the most economically favorable process combinations.
-
-## Project Structure
-
-The repository is structured as follows:
-
-- **`/simulation/`**: Contains the Python scripts and configuration files used to automate large-scale process simulations in Aspen and AVEVA.
-- **`/data/`**: Includes the raw simulation data, processed datasets, and filtered data used for machine learning training and inference.
-- **`/models/`**: Houses the machine learning models, along with scripts for training, evaluation, and inference.
-- **`/results/`**: Contains the final results of the large-scale inference and optimization processes, including the economic analysis and semi-final process combinations.
-- **`/docs/`**: Documentation related to the project, including detailed reports and explanations of each step.
-
-## Key Steps
-
-### 1. Simulation Data Generation
-- **Software**: Aspen and AVEVA were used to simulate a wide range of process conditions in the scrubber and reactor systems.
-- **Automation**: Python scripts were developed to automate the simulation process, resulting in over 100,000 cases being generated and stored in the `/data/` directory.
-
-### 2. Machine Learning Model Development
-- **Training**: The simulation data was used to train machine learning models capable of predicting scrubber outputs and optimizing reactor conditions.
-- **Preprocessing**: The raw simulation data was cleaned, filtered, and preprocessed (e.g., scaling and normalization) before being split into training, validation, and test sets.
-- **Model**: Multiple machine learning algorithms were tested, and the best-performing model was selected for large-scale inference.
-
-### 3. Large-scale Inference and Optimization
-- **Inference**: The trained model was used to infer millions of potential process combinations, significantly reducing the time required for manual simulations.
-- **Filtering**: The predicted combinations were filtered to ensure they met process constraints and operational feasibility.
-- **Clustering**: Data clustering techniques, such as DBSCAN, were applied to reduce the number of process combinations to a manageable level for further analysis.
-
-### 4. Economic Analysis
-- **Cost Estimation**: Equipment costs, operating expenses, and potential revenue were calculated for each optimized process combination.
-- **Net Profit Calculation**: A detailed economic analysis was performed, considering factors such as inflation and operational longevity, to identify the most profitable process combinations.
-
-## Requirements
-
-To run the simulations, train the machine learning models, and perform inference, the following dependencies are required:
-
-- Python 3.x
-- `pandas`
-- `numpy`
-- `scikit-learn`
-- `tensorflow` or `pytorch` (depending on the chosen ML framework)
-- `matplotlib`
-- Aspen (for process simulations)
-- AVEVA (for process simulations)
-
-You can install the necessary Python libraries using the following command:
-
-```bash
-pip install -r requirements.txt
+### 7. 경제성 분석
+- **비용 및 수익 분석**: 각 최적화된 공정 조합에 대해 장비비용, 운영비용, 수익성을 계산하고, 경제성이 가장 높은 조합을 선정합니다.
+- **최종 결정**: 경제성 분석 결과를 바탕으로 최종적으로 가장 유리한 세미 파이널 조합을 도출합니다.
